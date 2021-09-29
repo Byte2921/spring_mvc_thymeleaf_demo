@@ -19,7 +19,7 @@ function CreateDistanceChart() {
 
   var options = {
     title: "Your last 30-day workout activity",
-    width: 1000,
+    width: 1500,
     height: 600,
     hAxis: {
       title: "Date of workout",
@@ -30,6 +30,7 @@ function CreateDistanceChart() {
     bar: {
       width: 30,
     },
+    isStacked: true,
   };
 
   var chart = new google.visualization.ColumnChart(

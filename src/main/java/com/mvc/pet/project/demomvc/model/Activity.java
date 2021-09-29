@@ -30,4 +30,8 @@ public enum Activity {
                 .filter(Activity -> Activity.number == number)
                 .findFirst();
     }
+
+    public double getNumber() {
+        return this.number;
+    }
 }

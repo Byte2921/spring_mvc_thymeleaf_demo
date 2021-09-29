@@ -14,8 +14,9 @@ public class SportController {
     SportServiceImpl sportService;
 
     @GetMapping("/sport")
-    public String greeting(Model model) {
-        model.addAttribute("sports", sportService.processSportFile());
+    public String greeting(@RequestParam(name = "activity", required = false, defaultValue = "-1") double activityType, Model model) {
+        model.addAttribute("sports", sportService.processSports(activityType));
+        model.addAttribute("activityType", sportService.getAllActivities());
         return "sport";
     }
 }
