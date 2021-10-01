@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <form
+      action="#"
+      th:action="@{/sport/new}"
+      th:object="${sport}"
+      method="POST"
+    >
+      <table>
+        <tr>
+          <td>Activity type:</td>
+          <td>
+            <select th:field="*{activityType}">
+              <option
+                th:each="type : ${activities?.entrySet()}"
+                th:value="${type.key}"
+                th:text="${type.key}"
+              ></option>
+            </select>
+          </td>
+          <td th:if="${#fields.hasErrors('activityType')}" th:errors="*{activityType}">Activity error</td>
+        </tr>
+        <tr>
+            <td>Start time:</td>
+            <td>
+                <input type="datetime-local" th:field="*{startTime}"/></td>
+                    <td th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}">Start time error</td>
+            </td>
+        </tr>
+        <tr>
+            <td>Duration in seconds:</td>
+            <td>
+                <input type="text" th:field="*{duration}" /></td>
+                    <td th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}">Duration error</td>
+            </td>
+        </tr>
+        <tr>
+            <td>Distance in meters:</td>
+            <td>
+                <input type="text" th:field="*{distance}" /></td>
+                    <td th:if="${#fields.hasErrors('distance')}" th:errors="*{distance}">Distance error</td>
+            </td>
+        </tr>
+        <tr>
+            <td>Maximum pace(/100m) in seconds:</td>
+            <td>
+                <input type="text" th:field="*{maximumPace}" /></td>
+                    <td th:if="${#fields.hasErrors('maximumPace')}" th:errors="*{maximumPace}">Maximum pace error</td>
+            </td>
+        </tr>
+        <tr>
+            <td>Minimum pace(/100m) in seconds:</td>
+            <td>
+                <input type="text" th:field="*{minimumPace}" /></td>
+                    <td th:if="${#fields.hasErrors('minimumPace')}" th:errors="*{minimumPace}">Minimum pace error</td>
+            </td>
+        </tr>
+        <tr>
+            <td>Average pace(/100m) in seconds:</td>
+            <td>
+                <input type="text" th:field="*{averagePace}" /></td>
+                    <td th:if="${#fields.hasErrors('averagePace')}" th:errors="*{averagePace}">Average pace error</td>
+            </td>
+        </tr>
+        <tr>
+            <td>Calories burned:</td>
+            <td>
+                <input type="text" th:field="*{calories}" /></td>
+                    <td th:if="${#fields.hasErrors('calories')}" th:errors="*{calories}">Calories burned error</td>
+            </td>
+        </tr>
+        <tr>
+            <td><button type="submit">Submit</button></td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

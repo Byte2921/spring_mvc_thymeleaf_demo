@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -16,22 +18,23 @@ import java.time.ZoneOffset;
 @Builder
 @Data
 public class Sport {
+    @NotNull
     private Activity activityType;
-    private LocalDateTime startTime;
-    private Duration duration;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull
+    private LocalDateTime startTime = LocalDateTime.now();
+    @NotNull
+    private double duration;
+    @NotNull
+    @Min(100)
     private double distance;
-    private Duration maximumPace;
-    private Duration minimumPace;
-    private Duration averagePace;
+    private double maximumPace;
+    private double minimumPace;
+    private double averagePace;
     private double calories;
     public static class SportBuilder {
         public SportBuilder activityType(double type) {
             this.activityType = Activity.valueOf(type).orElse(Activity.OTHER);
-            return this;
-        }
-
-        public SportBuilder duration(double duration) {
-            this.duration = Duration.ofSeconds((long) duration);
             return this;
         }
 
@@ -41,17 +44,17 @@ public class Sport {
         }
 
         public SportBuilder maximumPace(double maxPace) {
-            this.maximumPace = Duration.ofSeconds((long) (maxPace * 60));
+            this.maximumPace = maxPace * 60;
             return this;
         }
 
         public SportBuilder minimumPace(double minPace) {
-            this.minimumPace = Duration.ofSeconds((long) (minPace * 60));
+            this.minimumPace = minPace * 60;
             return this;
         }
 
         public SportBuilder averagePace(double avgPace) {
-            this.averagePace = Duration.ofSeconds((long) (avgPace * 60));
+            this.averagePace = avgPace * 60;
             return this;
         }
     }

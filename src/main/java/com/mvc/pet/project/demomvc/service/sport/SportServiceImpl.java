@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,8 +16,10 @@ import java.util.stream.Stream;
 public class SportServiceImpl implements SportService {
     private static final String COMMA_DELIMITER = ",";
 
+    private HashSet<Sport> addedSports = new HashSet<>();
+
     @Override
-    public HashSet<Sport> processSports(double activityType) {
+    public HashSet<Sport> getSports(double activityType) {
         HashSet<Sport> sports = new HashSet<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/SPORT_1632579326949.csv"))) {
             String line;
@@ -29,13 +28,26 @@ public class SportServiceImpl implements SportService {
                     sports.add(CreateNewSport(line));
                 }
             }
-            return activityType == -1 ? sports : sports.stream()
-                    .filter(sport -> Activity.valueOf(activityType).get().equals(sport.getActivityType()))
-                    .collect(Collectors.toCollection(HashSet::new));
+            return filterSports(sports, activityType);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return sports;
         }
+    }
+
+    @Override
+    public HashSet<Sport> filterSports(HashSet<Sport> sports, double activityType) {
+        return activityType == -1 ? mergeSportsData(sports) :
+                mergeSportsData(sports).stream()
+                        .filter(sport -> Activity.valueOf(activityType).get().equals(sport.getActivityType()))
+                        .collect(Collectors.toCollection(HashSet::new));
+    }
+
+    @Override
+    public HashSet<Sport> mergeSportsData(HashSet<Sport> sports) {
+        return Stream.of(sports, addedSports)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
     @Override
@@ -63,5 +75,10 @@ public class SportServiceImpl implements SportService {
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, HashMap::new));
+    }
+
+    @Override
+    public void addNewSport(Sport sport) {
+        this.addedSports.add(sport);
     }
 }
