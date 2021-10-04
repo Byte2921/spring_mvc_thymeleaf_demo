@@ -1,7 +1,7 @@
 package com.mvc.pet.project.demomvc.controller;
 
 import com.mvc.pet.project.demomvc.model.Sport;
-import com.mvc.pet.project.demomvc.service.sport.SportServiceImpl;
+import com.mvc.pet.project.demomvc.service.sport.impl.SportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,19 +21,19 @@ public class SportController{
     @GetMapping("/sport")
     public String greeting(@RequestParam(name = "activity", required = false, defaultValue = "-1") double activityType, Model model) {
         model.addAttribute("sports", sportService.filterSports(activityType));
-        model.addAttribute("activityType", sportService.getAllActivities());
+        model.addAttribute("activityType", sportService.getActivities());
         return "sport";
     }
 
     @GetMapping("/sport/new")
     public String showForm(Sport sport, Model model) {
-        model.addAttribute("activities", sportService.getAllActivities());
+        model.addAttribute("activities", sportService.getActivities());
         return "sportForm";
     }
 
     @PostMapping("sport/new")
     public String checkNewSport(@Valid Sport sport, BindingResult bindingResult,  Model model) {
-        model.addAttribute("activities", sportService.getAllActivities());
+        model.addAttribute("activities", sportService.getActivities());
         if (bindingResult.hasErrors()) {
             return "sportForm";
         }

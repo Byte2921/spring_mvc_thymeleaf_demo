@@ -1,7 +1,8 @@
-package com.mvc.pet.project.demomvc.service.sport;
+package com.mvc.pet.project.demomvc.service.sport.impl;
 
 import com.mvc.pet.project.demomvc.model.Activity;
 import com.mvc.pet.project.demomvc.model.Sport;
+import com.mvc.pet.project.demomvc.service.sport.SportService;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class SportServiceImpl implements SportService {
 
     private static final String COMMA_DELIMITER = ",";
     private HashSet<Sport> sports = new HashSet<>();
-    private Map<String, Double> activities = new HashMap<>();
+    private Map<String, Double> activities = new LinkedHashMap<>();
 
 
     @PostConstruct
@@ -42,7 +43,7 @@ public class SportServiceImpl implements SportService {
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, HashMap::new));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
 
@@ -72,7 +73,7 @@ public class SportServiceImpl implements SportService {
     }
 
     @Override
-    public Map<String, Double> getAllActivities() {
+    public Map<String, Double> getActivities() {
         return activities;
     }
 

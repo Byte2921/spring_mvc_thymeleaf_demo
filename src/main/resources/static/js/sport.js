@@ -1,7 +1,7 @@
 google.charts.load("current", { packages: ["corechart", "bar"] });
-google.charts.setOnLoadCallback(CreateDistanceChart);
+google.charts.setOnLoadCallback(createDistanceChart);
 
-function CreateDistanceChart() {
+function createDistanceChart() {
   var data = new google.visualization.DataTable();
   data.addColumn("datetime", "Date");
   data.addColumn("number", "Distance");

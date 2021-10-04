@@ -8,6 +8,6 @@ import java.util.Map;
 public interface SportService {
     HashSet<Sport> filterSports(double activityType);
     Sport CreateNewSport(String line);
-    Map<String, Double> getAllActivities();
+    Map<String, Double> getActivities();
     void addNewSport(Sport sport);
 }
