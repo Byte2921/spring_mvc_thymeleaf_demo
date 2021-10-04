@@ -3,24 +3,26 @@ package com.mvc.pet.project.demomvc.service.sport;
 import com.mvc.pet.project.demomvc.model.Activity;
 import com.mvc.pet.project.demomvc.model.Sport;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
+@Service
 @NoArgsConstructor
 public class SportServiceImpl implements SportService {
+
     private static final String COMMA_DELIMITER = ",";
+    private HashSet<Sport> sports = new HashSet<>();
+    private Map<String, Double> activities = new HashMap<>();
 
-    private HashSet<Sport> addedSports = new HashSet<>();
 
-    @Override
-    public HashSet<Sport> getSports(double activityType) {
-        HashSet<Sport> sports = new HashSet<>();
+    @PostConstruct
+    public void loadSports() {
         try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/SPORT_1632579326949.csv"))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -28,26 +30,28 @@ public class SportServiceImpl implements SportService {
                     sports.add(CreateNewSport(line));
                 }
             }
-            return filterSports(sports, activityType);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-            return sports;
         }
     }
 
-    @Override
-    public HashSet<Sport> filterSports(HashSet<Sport> sports, double activityType) {
-        return activityType == -1 ? mergeSportsData(sports) :
-                mergeSportsData(sports).stream()
-                        .filter(sport -> Activity.valueOf(activityType).get().equals(sport.getActivityType()))
-                        .collect(Collectors.toCollection(HashSet::new));
+    @PostConstruct
+    public void loadActivities() {
+        activities =  Stream.of(Activity.values())
+                .collect(Collectors.toMap(Enum::toString, Activity::getNumber))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, HashMap::new));
     }
 
+
     @Override
-    public HashSet<Sport> mergeSportsData(HashSet<Sport> sports) {
-        return Stream.of(sports, addedSports)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toCollection(HashSet::new));
+    public HashSet<Sport> filterSports(double activityType) {
+        return activityType == -1 ? this.sports :
+                this.sports.stream()
+                        .filter(sport -> Activity.valueOf(activityType).get().equals(sport.getActivityType()))
+                        .collect(Collectors.toCollection(HashSet::new));
     }
 
     @Override
@@ -69,16 +73,11 @@ public class SportServiceImpl implements SportService {
 
     @Override
     public Map<String, Double> getAllActivities() {
-        return Stream.of(Activity.values())
-                .collect(Collectors.toMap(Enum::toString, Activity::getNumber))
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, HashMap::new));
+        return activities;
     }
 
     @Override
     public void addNewSport(Sport sport) {
-        this.addedSports.add(sport);
+        this.sports.add(sport);
     }
 }

@@ -20,7 +20,7 @@ public class SportController{
 
     @GetMapping("/sport")
     public String greeting(@RequestParam(name = "activity", required = false, defaultValue = "-1") double activityType, Model model) {
-        model.addAttribute("sports", sportService.getSports(activityType));
+        model.addAttribute("sports", sportService.filterSports(activityType));
         model.addAttribute("activityType", sportService.getAllActivities());
         return "sport";
     }
