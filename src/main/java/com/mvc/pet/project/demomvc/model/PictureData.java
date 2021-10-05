@@ -12,5 +12,5 @@ import java.util.LinkedHashMap;
 @AllArgsConstructor
 public class PictureData {
     private String picture;
-    private LinkedHashMap<String, Integer> colors = new LinkedHashMap<>();
+    private LinkedHashMap<String, Long> colors = new LinkedHashMap<>();
 }

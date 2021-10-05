@@ -7,9 +7,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public interface PictureService {
     PictureData processImage(MultipartFile file) throws IOException;
-    LinkedHashMap<String, Integer> getColors(BufferedImage image);
-    LinkedHashMap<String, Integer> sortColors(LinkedHashMap<String, Integer> colors);
+    LinkedHashMap<String, Long> getColors(BufferedImage image, int mode);
 }
